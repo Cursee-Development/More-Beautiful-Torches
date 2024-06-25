@@ -13,7 +13,7 @@ public class MoreBeautifulTorches {
 
     public static final String CONFIG_FILEPATH = Services.PLATFORM.getGameDirectory() + File.separator + "config";
     public static final String MBT_TESTPATH = CONFIG_FILEPATH + File.separator + "test.txt";
-    public static final String MBT_TEST1PATH = CONFIG_FILEPATH + File.separator + "test1.txt";
+    public static final String MBT_TEST1PATH = CONFIG_FILEPATH + File.separator + "test3.txt";
 
     public static void init() {
 
@@ -52,13 +52,23 @@ public class MoreBeautifulTorches {
 
                 BufferedWriter writer = new BufferedWriter(new FileWriter(MBT_TEST1));
 
-                writer.write("{" + '\n');
+//                writer.write("{" + '\n');
 
                 while (receivedIterator.hasNext()) {
-                    writer.write("    \"" + receivedIterator.next() + "\",\n");
+
+                    final String value = receivedIterator.next();
+
+                    writer.write(value + "_redstone_torch\n");
+                    writer.write(value + "_soul_torch\n");
+                    writer.write(value + "_torch\n");
+
+//                    writer.write("    \"" + value + "_redstone_torch" + "\",\n");
+//                    writer.write("    \"" + value + "_soul_torch" + "\",\n");
+//                    writer.write("    \"" + value + "_torch" + "\",\n");
+//                    writer.write("    \"" + receivedIterator.next() + "\",\n");
                 }
 
-                writer.write("}");
+//                writer.write("}");
 
                 writer.flush();
                 writer.close();
