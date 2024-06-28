@@ -1,82 +1,137 @@
 package com.cursee.more_beautiful_torches;
 
 import com.cursee.monolib.platform.Services;
+import net.minecraft.core.registries.BuiltInRegistries;
+import net.minecraft.world.level.block.Block;
 
 import java.io.*;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Collections;
 import java.util.List;
-import java.util.ListIterator;
-import java.util.stream.Stream;
 
 public class MoreBeautifulTorches {
 
     public static final String CONFIG_FILEPATH = Services.PLATFORM.getGameDirectory() + File.separator + "config";
-    public static final String MBT_TESTPATH = CONFIG_FILEPATH + File.separator + "test.txt";
+    public static final String BLOCK_LOG_FILEPATH = CONFIG_FILEPATH + File.separator + "blocks.txt";
     public static final String MBT_TEST1PATH = CONFIG_FILEPATH + File.separator + "test3.txt";
 
     public static void init() {
 
-        File CONFIG_FILE = new File(CONFIG_FILEPATH);
-        if (!CONFIG_FILE.isDirectory()) {
-            CONFIG_FILE.mkdir();
+        final List<String> blocks = new ArrayList<>();
+
+        for (Block block : BuiltInRegistries.BLOCK.stream().toList()) {
+
+            final String name = block.getDescriptionId().replace("block.minecraft.", "");
+
+            if (passes(name, "banner", "bed", "button", "door", "fence", "sign", "leaves", "pressure", "rail",
+                    "slab", "stairs", "wall", "sapling", "candle", "carpet", "cake", "air", "water", "lava", "shulker",
+                    "cactus", "campfire", "cauldron", "table", "craft", "chorus", "plant", "flower", "cobweb", "cocoa",
+                    "corn", "comparator", "composter", "conduit", "bulb", "head", "skull", "dandelion", "tulip", "rose",
+                    "detector", "fan", "decorated_pot", "dispenser", "egg")) {
+
+                blocks.add(name);
+            }
         }
 
-        File MBT_TEST = new File(MBT_TESTPATH);
-        File MBT_TEST1 = new File(MBT_TEST1PATH);
+        Collections.sort(blocks);
 
-        if (MBT_TEST.isFile()) {
+        File CONFIG_DIR = new File(CONFIG_FILEPATH);
 
-            List<String> received = new ArrayList<>();
+        if (!CONFIG_DIR.isDirectory()) {
+            CONFIG_DIR.mkdir();
+        }
 
-            try {
-                BufferedReader reader = new BufferedReader(new FileReader(MBT_TEST));
+        File BLOCK_LOG = new File(BLOCK_LOG_FILEPATH);
 
-                Stream<String> lines = reader.lines();
-
-                Iterator<String> it = lines.iterator();
-
-                while (it.hasNext()) {
-                    String line = it.next();
-                    System.out.println(line);
-                    received.add(line);
-                }
-
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            Iterator<String> receivedIterator = received.iterator();
+        if (!BLOCK_LOG.isFile()) {
 
             try {
+                BufferedWriter writer = new BufferedWriter(new FileWriter(BLOCK_LOG));
 
-                BufferedWriter writer = new BufferedWriter(new FileWriter(MBT_TEST1));
-
-//                writer.write("{" + '\n');
-
-                while (receivedIterator.hasNext()) {
-
-                    final String value = receivedIterator.next();
-
-                    writer.write(value + "_redstone_torch\n");
-                    writer.write(value + "_soul_torch\n");
-                    writer.write(value + "_torch\n");
-
-//                    writer.write("    \"" + value + "_redstone_torch" + "\",\n");
-//                    writer.write("    \"" + value + "_soul_torch" + "\",\n");
-//                    writer.write("    \"" + value + "_torch" + "\",\n");
-//                    writer.write("    \"" + receivedIterator.next() + "\",\n");
+                for (String block : blocks) {
+                    writer.write(block + '\n');
                 }
-
-//                writer.write("}");
 
                 writer.flush();
                 writer.close();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
             }
+            catch (IOException e) {
+                System.out.println(e.getMessage());
+            }
+
+        }
+        else {
+            System.out.println(BLOCK_LOG_FILEPATH + " already exists. Ignoring potential overwrite.");
         }
     }
+
+    private static boolean passes(String name, String... invalids) {
+
+        for (String invalid : invalids) {
+            if (name.contains(invalid)) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+//
+//        File MBT_TEST = new File(MBT_TESTPATH);
+//        File MBT_TEST1 = new File(MBT_TEST1PATH);
+//
+//        if (MBT_TEST.isFile()) {
+//
+//            List<String> received = new ArrayList<>();
+//
+//            try {
+//                BufferedReader reader = new BufferedReader(new FileReader(MBT_TEST));
+//
+//                Stream<String> lines = reader.lines();
+//
+//                Iterator<String> it = lines.iterator();
+//
+//                while (it.hasNext()) {
+//                    String line = it.next();
+//                    System.out.println(line);
+//                    received.add(line);
+//                }
+//
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//            Iterator<String> receivedIterator = received.iterator();
+//
+//            try {
+//
+//                BufferedWriter writer = new BufferedWriter(new FileWriter(MBT_TEST1));
+//
+////                writer.write("{" + '\n');
+//
+//                while (receivedIterator.hasNext()) {
+//
+//                    final String value = receivedIterator.next();
+//
+//                    writer.write(value + "_redstone_torch\n");
+//                    writer.write(value + "_soul_torch\n");
+//                    writer.write(value + "_torch\n");
+//
+////                    writer.write("    \"" + value + "_redstone_torch" + "\",\n");
+////                    writer.write("    \"" + value + "_soul_torch" + "\",\n");
+////                    writer.write("    \"" + value + "_torch" + "\",\n");
+////                    writer.write("    \"" + receivedIterator.next() + "\",\n");
+//                }
+//
+////                writer.write("}");
+//
+//                writer.flush();
+//                writer.close();
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//        }
+//    }
 
 
 
