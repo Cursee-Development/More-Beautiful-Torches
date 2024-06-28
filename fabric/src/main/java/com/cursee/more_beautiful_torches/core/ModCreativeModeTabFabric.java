@@ -12,7 +12,7 @@ import net.minecraft.world.item.ItemStack;
 public class ModCreativeModeTabFabric {
 	public static void register() {
 		Constants.LOG.info("FabricItemGroupRegistry " + Constants.MOD_ID);
-		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, "goldenfoods_tab"), GOLDENFOODS_TAB);
+		Registry.register(BuiltInRegistries.CREATIVE_MODE_TAB, new ResourceLocation(Constants.MOD_ID, "goldenfoods_tab"), GOLDENFOODS_TAB);
 		// registerCreativeTabEntries();
 	}
 	private static void registerCreativeTabEntries() {

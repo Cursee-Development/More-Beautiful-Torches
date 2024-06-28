@@ -14,7 +14,7 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 public class ModBlocksFabric {
 	
 	public static Item registerItem(String name, Item item) {
-		return Registry.register(BuiltInRegistries.ITEM, ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name), item);
+		return Registry.register(BuiltInRegistries.ITEM, new ResourceLocation(Constants.MOD_ID, name), item);
 	}
 	
 	// private static Item registerBlockItem(String name, Block block) {
@@ -24,7 +24,7 @@ public class ModBlocksFabric {
 	
 	private static Block registerBlock(String name, Block block) {
 		// registerBlockItem(name, block);
-		return Registry.register(BuiltInRegistries.BLOCK, ResourceLocation.fromNamespaceAndPath(Constants.MOD_ID, name), block);
+		return Registry.register(BuiltInRegistries.BLOCK, new ResourceLocation(Constants.MOD_ID, name), block);
 	}
 	
 	public static void register() {}
